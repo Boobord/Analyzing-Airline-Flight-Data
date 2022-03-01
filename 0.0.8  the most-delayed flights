@@ -1,0 +1,27 @@
+#find the most-delayed flights going into and out of SFO on May 11, 2018.
+
+motifs = (g.find("(a)-[ab]->(b); (b)-[bc]->(c)")
+            .filter("""(b.id = 'SFO') and
+                    (ab.date = '2018-05-11' and bc.date = '2018-05-11') and
+                    (ab.arrDelay > 30 or bc.deptDelay > 30) and
+                    (ab.flightNumber = bc.flightNumber) and
+                    (ab.airline = bc.airline) and
+                    (ab.time < bc.time)"""))      #incloude just one way
+                    
+#We’re also calculating the delta between the arriving and departing flights to see
+#which delays we can truly attribute to SFO.
+result = (motifs.withColumn("delta", motifs.bc.deptDelay - motifs.ab.arrDelay)
+        .select("ab", "bc", "delta")
+        .sort("delta", ascending=False))
+result.select(
+    F.col("ab.src").alias("a1"), #rename column a1 by alias
+    F.col("ab.time").alias("a1DeptTime"),
+    F.col("ab.arrDelay"),
+    F.col("ab.dst").alias("a2"),
+    F.col("bc.time").alias("a2DeptTime"),
+    F.col("bc.deptDelay"),
+    F.col("bc.dst").alias("a3"),
+    F.col("ab.airline"),
+    F.col("ab.flightNumber"),
+    F.col("delta")
+).show()                    
