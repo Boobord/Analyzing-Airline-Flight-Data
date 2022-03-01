@@ -1,0 +1,19 @@
+g = GraphFrame(cleaned_nodes, cleaned_relationships)
+
+airlines_reference = (spark.read.csv("C:/Users/USER/Desktop/power points/big data/graph/airport/data_airlines.csv")
+        .select("_c1", "_c3")
+        .withColumnRenamed("_c1", "name")
+        .withColumnRenamed("_c3", "code"))
+airlines_reference = airlines_reference[airlines_reference["code"] !="null"]
+airlines_reference.show()
+
+#the number of rows and columns
+print((airlines_reference.count(), len(airlines_reference.columns)))
+
+#the number of airports-Exploratory Analysis
+g.vertices.count()
+g.vertices.show()
+
+#the number of connections between airports
+g.edges.count()
+g.edges.show()
