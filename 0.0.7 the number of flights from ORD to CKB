@@ -1,0 +1,25 @@
+pd.set_option('display.max_colwidth', None)
+
+#how many flights (with or without delay)is down from ORD to CKB on May,2018?
+from_expr = 'id = "ORD"'
+to_expr = 'id = "CKB"'
+ord_to_ckb = g.bfs(from_expr, to_expr)
+ord_to_ckb.show(3, False)
+
+ord_to_ckb = ord_to_ckb.select(
+F.col("e0.date"),
+F.col("e0.time"),
+F.col("e0.flightNumber"),
+F.col("e0.deptDelay"))
+
+#the number of flights
+ord_to_ckb.count()
+
+ax = (ord_to_ckb
+    .sort("date")
+    .toPandas()
+    .plot(kind='bar', x='date', y='deptDelay', legend=None))
+ax.xaxis.set_label_text("")
+plt.tight_layout()
+plt.show()
+
