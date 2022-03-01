@@ -1,0 +1,20 @@
+#If we start from a specific US airport, how many different airports can we visit and come back to
+#the starting airport using the same airline?
+
+airlines = (g.edges
+            .groupBy("airline")
+            .agg(F.count("airline").alias("flights"))
+           .sort("flights", ascending=False))
+full_name_airlines = (airlines_reference
+                    .join(airlines, airlines.airline
+                            == airlines_reference.code)
+                    .select("code", "name", "flights"))
+ full_name_airlines.show()
+ 
+ # And now let’s create a bar chart showing our airlines
+ ax = (full_name_airlines.toPandas()
+     .plot(kind='bar', x='name', y='flights', legend=None))
+
+ax.xaxis.set_label_text("")
+plt.tight_layout()
+plt.show()
