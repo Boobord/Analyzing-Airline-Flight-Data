@@ -1,0 +1,11 @@
+#select US airport ,that the number is 1435 from all airports (7184)
+# then drop the US col
+
+cleaned_nodes = (nodes.select("_c1", "_c3", "_c4", "_c6", "_c7")
+.filter("_c3 = 'United States'")
+.withColumnRenamed("_c1", "name")
+.withColumnRenamed("_c4", "id")
+.withColumnRenamed("_c6", "latitude")
+.withColumnRenamed("_c7", "longitude")
+.drop("_c3")
+                )
