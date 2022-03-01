@@ -1,0 +1,23 @@
+#we want to see
+#delays through a midpoint hub like Chicago O’Hare International Airport (ORD).
+
+#the average delay of flights departing from ORD grouped by
+#the destination airport
+
+delayed_flights = (g.edges
+                .filter("src = 'ORD' and deptDelay > 0")
+                .groupBy("dst")
+                .agg(F.avg("deptDelay"), F.count("deptDelay"))
+                .withColumn("averageDelay",
+                            F.round(F.col("avg(deptDelay)"), 2))
+                .withColumn("numberOfDelays",
+                         F.col("count(deptDelay)")))   
+
+(delayed_flights
+   .join(g.vertices, delayed_flights.dst == g.vertices.id)
+   .sort(F.desc("averageDelay"))
+   .select("dst", "name", "averageDelay", "numberOfDelays")
+   .show(n=10, truncate=False))        
+   
+import pandas as pd
+delayed_flights.count()
