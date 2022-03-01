@@ -1,0 +1,8 @@
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("basic1").getOrCreate()
+
+from graphframes import *
+from pyspark.sql.types import *
+
+nodes = spark.read.csv("C:/Users/USER/Desktop/power points/big data/graph/airport/airports.csv", header=False)
+nodes.show()
