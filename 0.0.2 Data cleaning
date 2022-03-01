@@ -1,0 +1,4 @@
+print((cleaned_nodes.count(), len(cleaned_nodes.columns)))
+from pyspark.sql import functions as F
+cleaned_nodes = cleaned_nodes[cleaned_nodes["id"] != "\\N"]
+print((cleaned_nodes.count(), len(cleaned_nodes.columns)))
