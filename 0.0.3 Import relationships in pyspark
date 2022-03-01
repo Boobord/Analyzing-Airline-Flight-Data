@@ -1,0 +1,28 @@
+relationships = spark.read.csv("C:/Users/USER/Desktop/power points/big data/graph/airport/188591317_T_ONTIME.csv", header=True)
+
+cleaned_relationships = (relationships
+                         .select("ORIGIN", "DEST", "FL_DATE", "DEP_DELAY",
+                                "ARR_DELAY", "DISTANCE", "TAIL_NUM", "FL_NUM",
+                                "CRS_DEP_TIME", "CRS_ARR_TIME",
+                                "UNIQUE_CARRIER")
+                        .withColumnRenamed("ORIGIN", "src")
+                        .withColumnRenamed("DEST", "dst")
+                        .withColumnRenamed("DEP_DELAY", "deptDelay")
+                        .withColumnRenamed("ARR_DELAY", "arrDelay")
+                        .withColumnRenamed("TAIL_NUM", "tailNumber")
+                        .withColumnRenamed("FL_NUM", "flightNumber")
+                        .withColumnRenamed("FL_DATE", "date")
+                        .withColumnRenamed("CRS_DEP_TIME", "time")
+                        .withColumnRenamed("CRS_ARR_TIME", "arrivalTime")
+                        .withColumnRenamed("DISTANCE", "distance")
+                        .withColumnRenamed("UNIQUE_CARRIER", "airline")
+                        .withColumn("deptDelay",
+                                    F.col("deptDelay").cast(FloatType()))
+                        .withColumn("arrDelay",
+                                    F.col("arrDelay").cast(FloatType()))
+                        .withColumn("time", F.col("time").cast(IntegerType()))
+                        .withColumn("arrivalTime",
+                                    F.col("arrivalTime").cast(IntegerType()))
+                        )
+                         
+                         
