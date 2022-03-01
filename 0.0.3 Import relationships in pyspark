@@ -24,5 +24,4 @@ cleaned_relationships = (relationships
                         .withColumn("arrivalTime",
                                     F.col("arrivalTime").cast(IntegerType()))
                         )
-                         
-                         
+cleaned_relationships.show()                         
